@@ -8,15 +8,20 @@ from builtins import range
 
 
 class LazyMeta(type):
-    def __init__(cls, *args):
-        super(LazyMeta, cls).__init__(*args)
-        for attr in cls.__dict__:
-            if isinstance(cls.__dict__[attr], Lazy):
-                cls.__dict__[attr].method_name = attr
+    """metaclass to simplify creation of lazy methods"""
+
+    def __new__(meta, cls_name, bases, _dict):
+        for operator in _dict['_operators']:
+            _dict[operator] = LazyMethod(operator)
+
+        return super(LazyMeta, meta).__new__(meta, cls_name, bases, _dict)
 
 
-class Lazy(object):
+class LazyMethod(object):
     """Descriptor to easily implement arithmetic operators."""
+
+    def __init__(self, method_name=None):
+        self.method_name = method_name
 
     def __get__(self, instance, cls):
         def inner(*others):
@@ -35,14 +40,16 @@ class LazyInteger(with_metaclass(LazyMeta, object)):
 
     __metaclass__ = LazyMeta
 
+    _operators = (
+        '__add__',
+        '__sub__',
+        '__mul__',
+        '__div__',
+        '__abs__',  # works for unary operators too!
+    )
+
     def __init__(self, lazy_val=lambda: 0):
         self.lazy_val = lazy_val
-
-    __add__ = Lazy()
-    __sub__ = Lazy()
-    __mul__ = Lazy()
-    __div__ = Lazy()
-    __abs__ = Lazy()  # works for unary operators too!
 
     def __call__(self):
         """Evaluation."""
