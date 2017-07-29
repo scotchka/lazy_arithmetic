@@ -38,8 +38,6 @@ class LazyMethod(object):
 class LazyInteger(with_metaclass(LazyMeta, object)):
     """Lazy integers."""
 
-    __metaclass__ = LazyMeta
-
     _operators = (
         '__add__',
         '__sub__',
