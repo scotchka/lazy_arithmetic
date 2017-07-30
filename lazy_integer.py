@@ -13,6 +13,8 @@ class LazyMeta(type):
         for operator in _dict.get('_operators', ()):
             _dict[operator] = LazyMethod(operator)
 
+        _dict.pop('_operators', None)
+
         return super(LazyMeta, meta).__new__(meta, cls_name, bases, _dict)
 
 
