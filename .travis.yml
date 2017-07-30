@@ -2,9 +2,11 @@ language: python
 python:
   - 2.7
   - 3.6
+
 # command to install dependencies
-install: 
-  - pip install coveralls
+#install:
+#  - pip install coveralls
+
 # command to run tests
 script: 
   coverage run --source=. -m pytest --doctest-modules
