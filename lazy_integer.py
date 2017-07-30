@@ -38,7 +38,7 @@ class LazyBase(with_metaclass(LazyMeta, object)):
     """Inherit from this."""
 
     def __init__(self, lazy_val=None):
-        self.lazy_val = lazy_val or (lambda: self._default_val)
+        self.lazy_val = lazy_val or (lambda: self._type())
 
     def __call__(self):
         """Evaluation."""
@@ -47,6 +47,9 @@ class LazyBase(with_metaclass(LazyMeta, object)):
 
 class LazyInteger(LazyBase):
     """Lazy integers.
+
+        >>> LazyInteger()()
+        0
 
         >>> a = LazyInteger(lambda: 2)
         >>> b = LazyInteger(lambda: -3)
@@ -61,7 +64,7 @@ class LazyInteger(LazyBase):
         -6
     """
 
-    _default_val = 0
+    _type = int
 
     _operators = (
         '__add__',
@@ -75,13 +78,16 @@ class LazyInteger(LazyBase):
 class LazyString(LazyBase):
     """Lazy strings.
 
+        >>> LazyString()()
+        ''
+
         >>> s1 = LazyString(lambda: 'hello ')
         >>> s2 = LazyString(lambda: 'world')
         >>> (s1 + s2)()
         'hello world'
     """
 
-    _default_val = ''
+    _type = str
 
     _operators = (
         '__add__',
