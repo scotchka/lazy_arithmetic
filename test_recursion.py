@@ -12,10 +12,10 @@ def test_no_overflow():
 
 
 def test_overflow():
+    n = LazyInteger()
+
+    for _ in range(1000):
+        n += LazyInteger(lambda: 1)
+
     with pytest.raises(RuntimeError):
-        n = LazyInteger()
-
-        for _ in range(1000):
-            n += LazyInteger(lambda: 1)
-
         n()  # should overflow call stack
