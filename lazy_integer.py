@@ -60,6 +60,16 @@ class LazyInteger(LazyBase):
     )
 
 
+class LazyString(LazyBase):
+    """Lazy strings."""
+
+    _default_val = ''
+
+    _operators = (
+        '__add__',
+    )
+
+
 if __name__ == '__main__':
 
     a = LazyInteger(lambda: 2)
@@ -85,5 +95,9 @@ if __name__ == '__main__':
         assert e.args[0] == 'maximum recursion depth exceeded'
     else:
         raise AssertionError('Should have caused stack overflow.')
+
+    s1 = LazyString(lambda: 'hello ')
+    s2 = LazyString(lambda: 'world')
+    assert (s1 + s2)() == 'hello world'
 
     print('all tests pass')
