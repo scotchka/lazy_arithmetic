@@ -7,7 +7,7 @@ from future.utils import with_metaclass
 
 
 class LazyMeta(type):
-    """metaclass to simplify creation of lazy methods"""
+    """Metaclass to simplify creation of lazy methods."""
 
     def __new__(meta, cls_name, bases, _dict):
         for operator in _dict.get('_operators', ()):
@@ -16,6 +16,20 @@ class LazyMeta(type):
         _dict.pop('_operators', None)
 
         return super(LazyMeta, meta).__new__(meta, cls_name, bases, _dict)
+
+    def lazify(cls, value):
+        """Helper function to wrap literal values.
+
+            >>> (LazyInteger.lazify(2) + LazyInteger.lazify(3))()
+            5
+
+            >>> LazyInteger.lazify(-100)() == LazyInteger(lambda: -100)()
+            True
+
+            >>> isinstance(LazyString.lazify('hello'), LazyString)
+            True
+        """
+        return cls(lambda: value)
 
 
 class LazyMethod(object):
@@ -46,23 +60,32 @@ class LazyBase(with_metaclass(LazyMeta, object)):
         """Evaluation."""
         return self.lazy_val()
 
+    @property
+    def value(self):
+        """Evaluates and returns value.
+
+            >>> LazyInteger.lazify(-9).value
+            -9
+        """
+        return self.__call__()
+
 
 class LazyInteger(LazyBase):
     """Lazy integers.
 
-        >>> LazyInteger()()
+        >>> LazyInteger().value
         0
 
-        >>> a = LazyInteger(lambda: 2)
-        >>> b = LazyInteger(lambda: -3)
+        >>> a = LazyInteger.lazify(2)
+        >>> b = LazyInteger.lazify(-3)
 
-        >>> (a + b)()
+        >>> (a + b).value
         -1
 
-        >>> abs(b)()
+        >>> abs(b).value
         3
 
-        >>> (b * a)()
+        >>> (b * a).value
         -6
     """
 
@@ -83,9 +106,9 @@ class LazyString(LazyBase):
         >>> LazyString()()
         ''
 
-        >>> s1 = LazyString(lambda: 'hello ')
-        >>> s2 = LazyString(lambda: 'world')
-        >>> (s1 + s2)()
+        >>> s1 = LazyString.lazify('hello ')
+        >>> s2 = LazyString.lazify('world')
+        >>> (s1 + s2).value
         'hello world'
     """
 
