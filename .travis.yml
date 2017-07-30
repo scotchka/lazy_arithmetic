@@ -8,6 +8,6 @@ install:
   - pip install coveralls
 # command to run tests
 script: 
-  coverage run --source=. lazy_integer.py
+  coverage run --source=. -m pytest --doctest-modules
 after_success:
   coveralls
