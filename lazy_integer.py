@@ -63,7 +63,7 @@ if __name__ == '__main__':
     assert abs(b)() == 3
     assert (b * a)() == -6
 
-    n = LazyInteger(lambda: 0)
+    n = LazyInteger()
 
     for _ in range(500):
         n += LazyInteger(lambda: 1)
