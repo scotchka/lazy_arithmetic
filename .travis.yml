@@ -8,6 +8,6 @@ install:
   - pip install coveralls
 # command to run tests
 script: 
-  coverage run lazy_integer.py
+  coverage run --source=. lazy_integer.py
 after_success:
   coveralls
