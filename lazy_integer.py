@@ -4,7 +4,6 @@ Lazy integer arithmetic.
 """
 from __future__ import print_function, division
 from future.utils import with_metaclass
-from builtins import range
 
 
 class LazyMeta(type):
@@ -47,7 +46,20 @@ class LazyBase(with_metaclass(LazyMeta, object)):
 
 
 class LazyInteger(LazyBase):
-    """Lazy integers."""
+    """Lazy integers.
+
+        >>> a = LazyInteger(lambda: 2)
+        >>> b = LazyInteger(lambda: -3)
+
+        >>> (a + b)()
+        -1
+
+        >>> abs(b)()
+        3
+
+        >>> (b * a)()
+        -6
+    """
 
     _default_val = 0
 
@@ -61,43 +73,16 @@ class LazyInteger(LazyBase):
 
 
 class LazyString(LazyBase):
-    """Lazy strings."""
+    """Lazy strings.
+
+        >>> s1 = LazyString(lambda: 'hello ')
+        >>> s2 = LazyString(lambda: 'world')
+        >>> (s1 + s2)()
+        'hello world'
+    """
 
     _default_val = ''
 
     _operators = (
         '__add__',
     )
-
-
-if __name__ == '__main__':
-
-    a = LazyInteger(lambda: 2)
-    b = LazyInteger(lambda: -3)
-
-    assert (a + b)() == -1
-    assert abs(b)() == 3
-    assert (b * a)() == -6
-
-    n = LazyInteger()
-
-    for _ in range(500):
-        n += LazyInteger(lambda: 1)
-
-    assert n() == 500
-
-    for _ in range(500):
-        n += LazyInteger(lambda: 1)
-
-    try:
-        n()
-    except RuntimeError as e:
-        assert e.args[0] == 'maximum recursion depth exceeded'
-    else:
-        raise AssertionError('Should have caused stack overflow.')
-
-    s1 = LazyString(lambda: 'hello ')
-    s2 = LazyString(lambda: 'world')
-    assert (s1 + s2)() == 'hello world'
-
-    print('all tests pass')
