@@ -38,9 +38,18 @@ class LazyMethod(object):
 class LazyBase(with_metaclass(LazyMeta, object)):
     """Inherit from this."""
 
+    def __init__(self, lazy_val=None):
+        self.lazy_val = lazy_val or (lambda: self._default_val)
+
+    def __call__(self):
+        """Evaluation."""
+        return self.lazy_val()
+
 
 class LazyInteger(LazyBase):
     """Lazy integers."""
+
+    _default_val = 0
 
     _operators = (
         '__add__',
@@ -49,13 +58,6 @@ class LazyInteger(LazyBase):
         '__div__',
         '__abs__',  # works for unary operators too!
     )
-
-    def __init__(self, lazy_val=lambda: 0):
-        self.lazy_val = lazy_val
-
-    def __call__(self):
-        """Evaluation."""
-        return self.lazy_val()
 
 
 if __name__ == '__main__':
