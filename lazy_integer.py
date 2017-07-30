@@ -11,7 +11,7 @@ class LazyMeta(type):
     """metaclass to simplify creation of lazy methods"""
 
     def __new__(meta, cls_name, bases, _dict):
-        for operator in _dict['_operators']:
+        for operator in _dict.get('_operators', ()):
             _dict[operator] = LazyMethod(operator)
 
         return super(LazyMeta, meta).__new__(meta, cls_name, bases, _dict)
@@ -35,7 +35,11 @@ class LazyMethod(object):
         return inner
 
 
-class LazyInteger(with_metaclass(LazyMeta, object)):
+class LazyBase(with_metaclass(LazyMeta, object)):
+    """Inherit from this."""
+
+
+class LazyInteger(LazyBase):
     """Lazy integers."""
 
     _operators = (
