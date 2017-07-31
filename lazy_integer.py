@@ -4,9 +4,10 @@ Lazy integer arithmetic.
 """
 from __future__ import print_function, division
 from future.utils import with_metaclass
+import abc
 
 
-class LazyMeta(type):
+class LazyMeta(abc.ABCMeta):
     """Metaclass to simplify creation of lazy methods."""
 
     def __new__(meta, cls_name, bases, _dict):
@@ -68,6 +69,11 @@ class LazyBase(with_metaclass(LazyMeta, object)):
             -9
         """
         return self.__call__()
+
+    @abc.abstractmethod
+    def _type(self):
+        """Prevent this class from being instantiated."""
+        pass
 
 
 class LazyInteger(LazyBase):
