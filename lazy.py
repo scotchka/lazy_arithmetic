@@ -73,7 +73,6 @@ class LazyBase(with_metaclass(LazyMeta, object)):
     @abc.abstractmethod
     def _type(self):
         """Prevent this class from being instantiated."""
-        pass
 
 
 class LazyInteger(LazyBase):
