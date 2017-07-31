@@ -10,13 +10,13 @@ import abc
 class LazyMeta(abc.ABCMeta):
     """Metaclass to simplify creation of lazy methods."""
 
-    def __new__(meta, cls_name, bases, _dict):
+    def __new__(mcs, cls_name, bases, _dict):
         for operator in _dict.get('_operators', ()):
             _dict[operator] = LazyMethod(operator)
 
         _dict.pop('_operators', None)
 
-        return super(LazyMeta, meta).__new__(meta, cls_name, bases, _dict)
+        return super(LazyMeta, mcs).__new__(mcs, cls_name, bases, _dict)
 
     def lazify(cls, value):
         """Helper function to wrap literal values.
