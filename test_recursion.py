@@ -1,5 +1,5 @@
 import pytest
-from lazy_integer import LazyInteger
+from lazy import LazyInteger
 
 
 def test_no_overflow():
