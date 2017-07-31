@@ -17,7 +17,7 @@ class LazyMeta(type):
 
         return super(LazyMeta, meta).__new__(meta, cls_name, bases, _dict)
 
-    def lazify(cls, value=None):
+    def lazify(cls, value):
         """Helper function to wrap literal values.
 
             >>> (LazyInteger.lazify(2) + LazyInteger.lazify(3))()
@@ -28,9 +28,6 @@ class LazyMeta(type):
 
             >>> isinstance(LazyString.lazify('hello'), LazyString)
             True
-
-            >>> LazyString.lazify().value
-            ''
         """
         return cls(lambda: value)
 
