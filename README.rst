@@ -10,9 +10,16 @@ Implement lazy evaluation in Python.
 
 .. code::
 
-  from lazy import LazyBase
-
-  class LazyInteger(LazyBase):
-    _type = int
-
-    _operators = ('__add__',)
+  >>> from lazy import LazyBase
+  >>> class LazyInteger(LazyBase):
+  ...     _type = int
+  ...     _operators = ('__add__', '__mul__')
+  ...
+  >>> two = LazyInteger.lazify(2)
+  >>> three = LazyInteger.lazify(3)
+  >>> five = two + three
+  >>> five.value
+  5
+  >>> six = two * three
+  >>> six.value
+  6
