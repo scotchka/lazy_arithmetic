@@ -7,3 +7,12 @@ Lazy Arithmetic
 ---------------
 
 Implement lazy evaluation in Python.
+
+.. code::
+
+  from lazy import LazyBase
+
+  class LazyInteger(LazyBase):
+    _type = int
+
+    _operators = ('__add__',)
