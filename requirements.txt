@@ -1,2 +1,2 @@
-future
-coveralls
+future==0.16.0
+coveralls==1.1
