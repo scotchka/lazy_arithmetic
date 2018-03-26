@@ -8,7 +8,7 @@ Lazy Arithmetic
 
 Implement lazy evaluation in Python.
 
-.. code::
+.. code:: python
 
   >>> from lazy import LazyBase
   >>> class LazyInteger(LazyBase):
