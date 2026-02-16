@@ -1,2 +1,2 @@
-future==0.16.0
+future==1.0.0
 coveralls==1.1
